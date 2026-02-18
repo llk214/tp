@@ -8,8 +8,8 @@ public class RLAD {
         Scanner in = new Scanner(System.in);
         ArrayList<Double> income = new ArrayList<>();
         ArrayList<Double> expenses = new ArrayList<>();
-        ArrayList<String> category = new ArrayList<>();
+        ArrayList<String> itemType = new ArrayList<>();
         Logo.printRLAD();
-        addTransaction userTransaction = new addTransaction(income, expenses, category, in);
+        addTransaction userTransaction = new addTransaction(income, expenses, itemType, in);
     }
 }
