@@ -7,6 +7,7 @@ import seedu.RLAD.command.FilterCommand;
 import seedu.RLAD.command.HelpCommand;
 import seedu.RLAD.command.ListCommand;
 import seedu.RLAD.command.ModifyCommand;
+import seedu.RLAD.command.SortCommand;
 import seedu.RLAD.command.SummarizeCommand;
 import seedu.RLAD.exception.RLADException;
 
@@ -43,7 +44,7 @@ public class Parser {
     }
 
     private static boolean isValidAction(String action) {
-        return action.matches("add|delete|modify|list|filter|summarize|help|exit");
+        return action.matches("add|delete|modify|list|filter|sort|summarize|help|exit");
     }
 
     private static boolean requiresArguments(String action) {
@@ -65,6 +66,8 @@ public class Parser {
             return new FilterCommand(arguments);
         case "list":
             return new ListCommand(arguments);
+        case "sort":
+            return new SortCommand(arguments);
         case "help":
             return new HelpCommand(arguments);
         case "summarize":

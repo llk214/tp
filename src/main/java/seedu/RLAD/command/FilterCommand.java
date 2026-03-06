@@ -2,6 +2,7 @@ package seedu.RLAD.command;
 
 import seedu.RLAD.Transaction;
 import seedu.RLAD.TransactionManager;
+import seedu.RLAD.TransactionSorter;
 import seedu.RLAD.Ui;
 import seedu.RLAD.exception.RLADException;
 
@@ -24,8 +25,29 @@ import java.util.function.Predicate;
 public class FilterCommand extends Command {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    private String sortField;
+    private String sortDirection;
+
     public FilterCommand(String rawArgs) {
         super(rawArgs);
+        parseSortOverride(rawArgs);
+    }
+
+    private void parseSortOverride(String rawArgs) {
+        this.sortField = "";
+        this.sortDirection = "asc";
+        if (rawArgs == null || rawArgs.isEmpty()) {
+            return;
+        }
+        String[] tokens = rawArgs.trim().split("\\s+");
+        for (int i = 0; i < tokens.length; i++) {
+            if (tokens[i].equals("--sort") && i + 1 < tokens.length) {
+                this.sortField = tokens[i + 1].toLowerCase();
+                if (i + 2 < tokens.length && TransactionSorter.isValidDirection(tokens[i + 2].toLowerCase())) {
+                    this.sortDirection = tokens[i + 2].toLowerCase();
+                }
+            }
+        }
     }
 
     /**
@@ -111,6 +133,16 @@ public class FilterCommand extends Command {
                 String toStr = getRequiredValue(tokens, i, "--date-to");
                 predicate = predicate.and(buildDateToPredicate(toStr));
                 i++;
+                break;
+            case "--sort":
+                //Skip --sort and its value(s) — handled separately by sort logic
+                i++;
+                if (i < tokens.length && !tokens[i].startsWith("--")) {
+                    i++;
+                    if (i < tokens.length && TransactionSorter.isValidDirection(tokens[i].toLowerCase())) {
+                        i++;
+                    }
+                }
                 break;
             default:
                 throw new RLADException("Unknown filter flag: " + token);
@@ -282,6 +314,17 @@ public class FilterCommand extends Command {
         if (filtered.isEmpty()) {
             ui.showResult("No transactions match your filter criteria.");
             return;
+        }
+
+        // Step 4: Apply sorting (--sort override > global sort > insertion order)
+        if (!sortField.isEmpty() && TransactionSorter.isValidSortField(sortField)) {
+            filtered = TransactionSorter.sort(filtered, sortField, sortDirection);
+        } else {
+            String globalField = transactions.getGlobalSortField();
+            if (!globalField.isEmpty()) {
+                filtered = TransactionSorter.sort(filtered, globalField,
+                        transactions.getGlobalSortDirection());
+            }
         }
 
         for (Transaction t : filtered) {

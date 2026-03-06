@@ -6,119 +6,82 @@ import seedu.RLAD.TransactionSorter;
 import seedu.RLAD.Ui;
 
 import java.util.ArrayList;
-import java.util.function.Predicate;
 
 /**
- * Displays transactions with optional filtering and sorting.
- * Filtering is delegated to FilterCommand.buildPredicate() (Single Source of Truth).
- * Sorting uses TransactionSorter for --sort flag (amount or date, ascending).
+ * Displays all transactions with optional sort override.
+ * Uses the global sort order by default.
+ * A --sort flag temporarily overrides the global sort for this command only.
  *
  * Example usage:
- *   list                                -> Show all transactions
- *   list --sort amount                  -> Sort by amount ascending
- *   list --type debit --sort amount     -> Show only debits, sorted by amount
- *   list --category food --sort date    -> Show food category, sorted by date
- *   list --amount -gt 50 --sort amount  -> Show amounts > 50, sorted
+ *   list                -> Show all transactions (global sort)
+ *   list --sort amount  -> Override: sort by amount ascending
+ *   list --sort date desc -> Override: sort by date descending
  */
 public class ListCommand extends Command {
-    private String sortBy;       //The field to sort by (amount or date), empty if no sorting
-    private String filterArgs;   //The filter portion of rawArgs (everything except --sort)
+    private String sortField;
+    private String sortDirection;
 
     public ListCommand(String rawArgs) {
         super(rawArgs);
-        this.sortBy = parseSortField(rawArgs);
-        this.filterArgs = extractFilterArgs(rawArgs);
+        parseSortArgs(rawArgs);
     }
 
-    /**
-     * Extracts the --sort value from raw arguments.
-     *
-     * @param rawArgs the raw argument string from user input
-     * @return the sort field if provided, or empty string if not
-     */
-    private String parseSortField(String rawArgs) {
+    private void parseSortArgs(String rawArgs) {
+        this.sortField = "";
+        this.sortDirection = "";
         if (rawArgs == null || rawArgs.isEmpty()) {
-            return "";
+            return;
         }
         String[] tokens = rawArgs.split("\\s+");
-        for (int i = 0; i < tokens.length - 1; i++) {
-            if (tokens[i].equals("--sort")) {
-                return tokens[i + 1].toLowerCase();
-            }
-        }
-        return "";
-    }
-
-    /**
-     * Removes the --sort flag and its value from raw arguments,
-     * leaving only filter-related flags for FilterCommand.buildPredicate().
-     * This ensures --sort is handled by ListCommand while filter flags
-     * are passed cleanly to the shared filtering logic.
-     *
-     * @param rawArgs the raw argument string from user input
-     * @return the argument string with --sort and its value removed
-     */
-    private String extractFilterArgs(String rawArgs) {
-        if (rawArgs == null || rawArgs.isEmpty()) {
-            return "";
-        }
-        String[] tokens = rawArgs.split("\\s+");
-        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tokens.length; i++) {
-            if (tokens[i].equals("--sort")) {
-                //Skip the --sort flag and its value (next token)
-                i++;
-            } else {
-                //Append non-sort tokens to the filter string
-                if (sb.length() > 0) {
-                    sb.append(" ");
+            if (tokens[i].equals("--sort") && i + 1 < tokens.length) {
+                this.sortField = tokens[i + 1].toLowerCase();
+                if (i + 2 < tokens.length && TransactionSorter.isValidDirection(tokens[i + 2].toLowerCase())) {
+                    this.sortDirection = tokens[i + 2].toLowerCase();
+                } else {
+                    this.sortDirection = "asc";
                 }
-                sb.append(tokens[i]);
             }
         }
-        return sb.toString().trim();
     }
 
     @Override
     public void execute(TransactionManager transactions, Ui ui) {
-        // Step 1: Get all transactions from the manager
-        ArrayList<Transaction> allTransactions = transactions.getTransactions();
+        ArrayList<Transaction> results = transactions.getTransactions();
 
-        if (allTransactions.isEmpty()) {
+        if (results.isEmpty()) {
             ui.showResult("Your wallet is empty! Use 'add' to record a transaction.");
             return;
         }
 
-        // Step 2: Apply filter using FilterCommand's shared predicate builder
-        Predicate<Transaction> predicate = FilterCommand.buildPredicate(filterArgs);
-        ArrayList<Transaction> results = new ArrayList<>();
-        for (Transaction t : allTransactions) {
-            if (predicate.test(t)) {
-                results.add(t);
-            }
-        }
+        results = applySorting(results, transactions);
 
-        //Inform user if no transactions matched the filter criteria
-        if (results.isEmpty()) {
-            ui.showResult("No transactions match your filter criteria.");
-            return;
-        }
-
-        // Step 3: Sort the filtered results if --sort flag was provided
-        if (!sortBy.isEmpty()) {
-            results = TransactionSorter.sort(results, sortBy);
-        }
-
-        // Step 4: Display the filtered (and optionally sorted) transactions
         for (Transaction transaction : results) {
             ui.showResult(transaction.toString());
         }
     }
 
+    /**
+     * Applies sorting: uses --sort override if provided, otherwise falls back to global sort.
+     */
+    private ArrayList<Transaction> applySorting(ArrayList<Transaction> results,
+                                                TransactionManager transactions) {
+        if (!sortField.isEmpty()) {
+            return TransactionSorter.sort(results, sortField, sortDirection);
+        }
+        String globalField = transactions.getGlobalSortField();
+        if (!globalField.isEmpty()) {
+            return TransactionSorter.sort(results, globalField, transactions.getGlobalSortDirection());
+        }
+        return results;
+    }
+
     @Override
     public boolean hasValidArgs() {
-        //If --sort is provided, validate that the sort field is recognized
-        if (!sortBy.isEmpty() && !TransactionSorter.isValidSortField(sortBy)) {
+        if (rawArgs == null || rawArgs.isEmpty()) {
+            return true;
+        }
+        if (!sortField.isEmpty() && !TransactionSorter.isValidSortField(sortField)) {
             return false;
         }
         return true;
