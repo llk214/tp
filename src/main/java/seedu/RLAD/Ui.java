@@ -52,7 +52,8 @@ public class Ui {
         System.out.println("  modify    : Edit an existing entry");
         System.out.println("  delete    : Remove an entry");
         System.out.println("  filter    : Search transactions by type, category, amount, or date");
-        System.out.println("  list      : View your transaction history with filters and sorting");
+        System.out.println("  sort      : Set or view the global sort order (amount/date, asc/desc)");
+        System.out.println("  list      : View your transaction history");
         System.out.println("  summarize : Get a high-level breakdown of your spending");
         System.out.println("\nFormat:");
         System.out.println("\t$action --option_0 $argument_0 ... --option_k $argument_k");
