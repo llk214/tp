@@ -26,20 +26,20 @@ public class Transaction {
         return hashId;
     }
 
-    public double getAmount() {
-        return amount;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
     public String getType() {
         return type;
     }
 
     public String getCategory() {
         return category;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 
     public String getDescription() {
