@@ -1,9 +1,9 @@
-package seedu.RLAD.command;
+package seedu.rlad.command;
 
-import seedu.RLAD.TransactionManager;
-import seedu.RLAD.Transaction;
-import seedu.RLAD.Ui;
-import seedu.RLAD.exception.RLADException;
+import seedu.rlad.TransactionManager;
+import seedu.rlad.Transaction;
+import seedu.rlad.Ui;
+import seedu.rlad.exception.RLADException;
 
 public class AddCommandTest {
     public static void main(String[] args) {

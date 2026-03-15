@@ -1,6 +1,6 @@
-package seedu.RLAD.budget;
+package seedu.rlad.budget;
 
-import seedu.RLAD.exception.RLADException;
+import seedu.rlad.exception.RLADException;
 
 import java.time.YearMonth;
 import java.util.HashMap;
@@ -118,4 +118,3 @@ public class MonthlyBudget {
     public int getBudgetedCategoryCount() {
         return categoryBudgets.size();
     }
-}

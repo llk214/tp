@@ -1,9 +1,9 @@
-package seedu.RLAD.command;
+package seedu.rlad.command;
 
-import seedu.RLAD.Transaction;
-import seedu.RLAD.TransactionManager;
-import seedu.RLAD.Ui;
-import seedu.RLAD.exception.RLADException;
+import seedu.rlad.Transaction;
+import seedu.rlad.TransactionManager;
+import seedu.rlad.Ui;
+import seedu.rlad.exception.RLADException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

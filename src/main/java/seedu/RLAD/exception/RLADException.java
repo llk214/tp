@@ -1,4 +1,4 @@
-package seedu.RLAD.exception;
+package seedu.rlad.exception;
 
 public class RLADException extends RuntimeException {
     public RLADException(String message) {

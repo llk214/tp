@@ -1,13 +1,20 @@
-package seedu.RLAD.budget;
+package seedu.rlad.budget;
 
-import seedu.RLAD.TransactionManager;
-import seedu.RLAD.Ui;
-import seedu.RLAD.command.Command;
-import seedu.RLAD.exception.RLADException;
+import seedu.rlad.TransactionManager;
+import seedu.rlad.Ui;
+import seedu.rlad.command.Command;
+import seedu.rlad.exception.RLADException;
 
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 public class BudgetCommand extends Command {
     private static final int PROGRESS_BAR_LENGTH = 20;
@@ -53,6 +60,8 @@ public class BudgetCommand extends Command {
         case DELETE:
             handleDelete(budgetManager, parsedArgs, ui);
             break;
+        default:
+            throw new RLADException("Unknown budget subcommand: " + subCommandStr);
         }
     }
 

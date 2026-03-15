@@ -1,4 +1,4 @@
-package seedu.RLAD;
+package seedu.rlad;
 
 public class Logo {
     private static final String PADDING = "               ";

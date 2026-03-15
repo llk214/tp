@@ -1,9 +1,9 @@
-package seedu.RLAD.command;
+package seedu.rlad.command;
 
-import seedu.RLAD.TransactionManager;
-import seedu.RLAD.Ui;
-import seedu.RLAD.budget.BudgetManager;
-import seedu.RLAD.exception.RLADException;
+import seedu.rlad.TransactionManager;
+import seedu.rlad.Ui;
+import seedu.rlad.budget.BudgetManager;
+import seedu.rlad.exception.RLADException;
 
 public abstract class Command {
     protected final String action;

@@ -1,12 +1,14 @@
-package seedu.RLAD.budget;
+package seedu.rlad.budget;
 
-import seedu.RLAD.Transaction;
-import seedu.RLAD.TransactionManager;
-import seedu.RLAD.exception.RLADException;
+import seedu.rlad.Transaction;
+import seedu.rlad.TransactionManager;
+import seedu.rlad.exception.RLADException;
 
 import java.time.YearMonth;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Manages all monthly budgets and handles progress calculations.
@@ -132,7 +134,9 @@ public class BudgetManager {
     // Update category spending when a debit transaction is added
     private void updateCategorySpending(YearMonth month, Transaction transaction) {
         String transactionCategory = transaction.getCategory();
-        if (transactionCategory == null) return;
+        if (transactionCategory == null) {
+            return;
+        }
 
         // Find matching budget category
         for (BudgetCategory category : BudgetCategory.values()) {

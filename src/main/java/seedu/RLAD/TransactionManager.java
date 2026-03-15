@@ -1,8 +1,7 @@
-package seedu.RLAD;
+package seedu.rlad;
 
-import seedu.RLAD.budget.BudgetManager;
+import seedu.rlad.budget.BudgetManager;
 
-import java.time.YearMonth;
 import java.util.ArrayList;
 
 /**

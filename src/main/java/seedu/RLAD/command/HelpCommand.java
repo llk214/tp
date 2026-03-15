@@ -1,7 +1,7 @@
-package seedu.RLAD.command;
+package seedu.rlad.command;
 
-import seedu.RLAD.TransactionManager;
-import seedu.RLAD.Ui;
+import seedu.rlad.TransactionManager;
+import seedu.rlad.Ui;
 
 public class HelpCommand extends Command {
     public HelpCommand(String rawArgs) {
