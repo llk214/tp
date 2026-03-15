@@ -32,10 +32,10 @@ import seedu.RLAD.exception.RLADException;
 
 
 public class ListCommand extends Command {
+    private static final String DIVIDER = "-".repeat(75);
+
     private String sortField;
     private String sortDirection;
-
-    private static final String DIVIDER = "-".repeat(75);
 
     public ListCommand(String rawArgs) {
         super(rawArgs);
