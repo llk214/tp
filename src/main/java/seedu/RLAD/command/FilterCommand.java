@@ -9,10 +9,11 @@ import seedu.RLAD.Transaction;
 import seedu.RLAD.TransactionManager;
 import seedu.RLAD.Ui;
 import seedu.RLAD.exception.RLADException;
+
 /**
  * FilterCommand handles filtering transactions based on various criteria.
  * Provides shared filtering logic that can be used by other commands
- * (e.g., ListCommand, DeleteCommand).
+ * (e.g., ListCommand, DeleteCommand, SummarizeCommand).
  * Supported flags for buildPredicate():
  *   --type       credit | debit
  *   --category   any string (case-insensitive)
@@ -27,7 +28,6 @@ import seedu.RLAD.exception.RLADException;
 public class FilterCommand extends Command {
 
     public FilterCommand(String rawArgs) {
-
         super(rawArgs);
     }
 
