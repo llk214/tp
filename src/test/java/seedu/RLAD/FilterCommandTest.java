@@ -42,11 +42,8 @@ class FilterCommandTest {
     }
 
     @Test
-    public void buildPredicate_nullArgs_returnsAll() {
-        ArrayList<Transaction> results = createSampleTransactions();
-        Predicate<Transaction> predicate = FilterCommand.buildPredicate(null);
-        long count = results.stream().filter(predicate).count();
-        assertEquals(5, count);
+    public void buildPredicate_nullArgs_assertionError() {
+        assertThrows(AssertionError.class, () -> FilterCommand.buildPredicate(null));
     }
 
     @Test
