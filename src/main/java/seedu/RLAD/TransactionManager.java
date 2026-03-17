@@ -1,5 +1,7 @@
 package seedu.RLAD;
 
+import seedu.RLAD.budget.BudgetManager;
+
 import java.util.ArrayList;
 
 /**
@@ -36,24 +38,36 @@ import java.util.ArrayList;
  */
 
 public class TransactionManager {
-    private final ArrayList<Transaction> transactions = new ArrayList<>();
-
     /**
      * Creates a new transaction and adds it to storage.
      * Used by: AddCommand
      * @param t the Transaction to add
      */
+    private final ArrayList<Transaction> transactions = new ArrayList<>();
+    private BudgetManager budgetManager; // Add reference to BudgetManager
+
+    public TransactionManager() {
+        // Default constructor
+    }
+
+    public void setBudgetManager(BudgetManager budgetManager) {
+        this.budgetManager = budgetManager;
+    }
 
     public void addTransaction(Transaction t) {
         // TODO: Implement a loop to regenerate ID if idExists(t.getHashId()) is true
         transactions.add(t);
+
+        // Notify budget manager about the new transaction
+        if (budgetManager != null) {
+            budgetManager.onTransactionAdded(t);
+        }
     }
 
     /**
      * Checks if a Transaction HashID is already in use.
      * TODO: Replace O(N) list search with a HashSet for O(1) lookups to improve scaling.
      */
-
     private boolean idExists(String hashId) {
         return false;
     }
@@ -63,7 +77,6 @@ public class TransactionManager {
      * Used by: ListCommand, SummarizeCommand (with FilterCommand applied afterwards)
      * @return ArrayList of all transactions
      */
-
     public ArrayList<Transaction> getTransactions() {
         return transactions;
     }
@@ -74,7 +87,6 @@ public class TransactionManager {
      * @param id the transaction ID to search for
      * @return the Transaction if found, null otherwise
      */
-
     public Transaction findTransaction(String id) {
         for (Transaction t : transactions) {
             if (t.getHashId().equals(id)) {
@@ -90,11 +102,11 @@ public class TransactionManager {
      * @param id the transaction ID to delete
      * @return true if deletion was successful, false if ID not found
      */
-
     public boolean deleteTransaction(String id) {
         Transaction toDelete = findTransaction(id);
         if (toDelete != null) {
             transactions.remove(toDelete);
+            // Notify budget manager about deletion if needed
             return true;
         }
         return false;
@@ -107,11 +119,11 @@ public class TransactionManager {
      * @param updated the new transaction data
      * @return true if update was successful, false if ID not found
      */
-
     public boolean updateTransaction(String id, Transaction updated) {
         for (int i = 0; i < transactions.size(); i++) {
             if (transactions.get(i).getHashId().equals(id)) {
                 transactions.set(i, updated);
+                // Notify budget manager about update if needed
                 return true;
             }
         }

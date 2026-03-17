@@ -8,6 +8,7 @@ import seedu.RLAD.command.ListCommand;
 import seedu.RLAD.command.ModifyCommand;
 import seedu.RLAD.command.SummarizeCommand;
 import seedu.RLAD.exception.RLADException;
+import seedu.RLAD.budget.BudgetCommand;
 
 public class Parser {
 
@@ -42,11 +43,11 @@ public class Parser {
     }
 
     private static boolean isValidAction(String action) {
-        return action.matches("add|delete|modify|list|summarize|help|exit");
+        return action.matches("add|delete|modify|list|summarize|help|exit|budget");
     }
 
     private static boolean requiresArguments(String action) {
-        return action.matches("add|delete|modify");
+        return action.matches("add|delete|modify|budget");
     }
 
     public static Command parse(String input) throws RLADException {
@@ -68,6 +69,8 @@ public class Parser {
             return new SummarizeCommand(arguments);
         case "modify":
             return new ModifyCommand(action, arguments);
+        case "budget":
+            return new BudgetCommand(arguments);
         default:
             throw new RLADException("Unknown command: " + action);
         }
