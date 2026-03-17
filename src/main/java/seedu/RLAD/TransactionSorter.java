@@ -2,12 +2,14 @@ package seedu.RLAD;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.logging.Logger;
 
 /**
  * Provides sorting utilities for transaction lists.
  * Supports sorting by amount or date in ascending or descending order.
  */
 public class TransactionSorter {
+    private static final Logger logger = Logger.getLogger(TransactionSorter.class.getName());
     public static final String SORT_BY_AMOUNT = "amount";
     public static final String SORT_BY_DATE = "date";
 
@@ -32,6 +34,9 @@ public class TransactionSorter {
      */
     public static ArrayList<Transaction> sort(ArrayList<Transaction> transactions,
                                               String sortBy, String direction) {
+        assert transactions != null : "Transaction list should not be null";
+        assert sortBy != null : "Sort field should not be null";
+        logger.info("Sorting transactions by " + sortBy + " " + direction);
         ArrayList<Transaction> sorted = new ArrayList<>(transactions);
         Comparator<Transaction> comparator;
         switch (sortBy) {

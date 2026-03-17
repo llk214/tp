@@ -3,6 +3,7 @@ package seedu.RLAD.command;
 import seedu.RLAD.TransactionManager;
 import seedu.RLAD.TransactionSorter;
 import seedu.RLAD.Ui;
+import java.util.logging.Logger;
 
 /**
  * Sets the global sort order for transaction display.
@@ -13,6 +14,7 @@ import seedu.RLAD.Ui;
  *   sort reset        -> Clear sort, back to insertion order
  */
 public class SortCommand extends Command {
+    private static final Logger logger = Logger.getLogger(SortCommand.class.getName());
     private String field;
     private String direction;
 
@@ -38,6 +40,8 @@ public class SortCommand extends Command {
 
     @Override
     public void execute(TransactionManager transactions, Ui ui) {
+        assert transactions != null : "TransactionManager should not be null";
+        logger.info("Executing SortCommand with field: " + field + ", direction: " + direction);
         if (field.isEmpty()) {
             String currentField = transactions.getGlobalSortField();
             if (currentField.isEmpty()) {
