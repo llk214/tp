@@ -46,6 +46,10 @@ public class Transaction {
         return description != null ? description : "";
     }
 
+    public void setHashId(String hashId) {
+        this.hashId = hashId;
+    }
+
     @Override
     public String toString() {
         return String.format("[%s] %s | %s | $%.2f | %s | %s",
