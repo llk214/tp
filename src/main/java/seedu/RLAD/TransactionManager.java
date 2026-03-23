@@ -164,7 +164,7 @@ public class TransactionManager {
     }
 
     // Forces the transaction hashID to regen until unique
-    public Transaction hashCollisionPrevention(Transaction t) {
+    private Transaction hashCollisionPrevention(Transaction t) {
         while (transMap.containsKey(t.getHashId())) {
             t.regenerateHashId();
         }
