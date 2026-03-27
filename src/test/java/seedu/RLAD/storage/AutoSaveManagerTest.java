@@ -105,7 +105,7 @@ class AutoSaveManagerTest {
 
         ArrayList<Transaction> loaded = autoSaveManager.load();
         assertEquals(1, loaded.size());
-        // Description field is last, so pipe in description should still parse correctly
-        assertEquals("lunch", loaded.get(0).getDescription());
+        // Description is the last field, so pipes within it are preserved
+        assertEquals("lunch|dinner", loaded.get(0).getDescription());
     }
 }

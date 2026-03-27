@@ -98,7 +98,7 @@ public class AutoSaveManager {
      * Returns null if the line is malformed.
      */
     private Transaction parseLine(String line, int lineNum) {
-        String[] parts = line.split("\\|", -1);
+        String[] parts = line.split("\\|", 6);
         if (parts.length < 5) {
             logger.warning("Skipping malformed autosave line " + lineNum);
             return null;
