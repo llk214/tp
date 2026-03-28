@@ -24,6 +24,12 @@ public class BudgetManager {
     private final Map<YearMonth, MonthlyBudget> budgets;
     private final TransactionManager transactionManager;
 
+    private Ui ui;
+
+    public void setUi(Ui ui) {
+        this.ui = ui;
+    }
+
     public BudgetManager(TransactionManager transactionManager) {
         this.budgets = new HashMap<>();
         this.transactionManager = transactionManager;
@@ -295,7 +301,11 @@ public class BudgetManager {
      * @param month The month to check
      * @param ui The UI instance to display messages
      */
-    public void checkBudgetThresholds(YearMonth month, Ui ui) {
+    public void checkBudgetThresholds(YearMonth month) {
+        if (ui == null) {
+            return; //No UI to display notifications
+        }
+
         MonthlyBudget budget = budgets.get(month);
         if (budget == null) {
             return;
