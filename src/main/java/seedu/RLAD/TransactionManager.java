@@ -123,6 +123,7 @@ public class TransactionManager {
         Transaction toDelete = findTransaction(id);
         if (toDelete != null) {
             transactions.remove(toDelete);
+            transMap.remove(id);
             // Notify budget manager about the deleted transaction
             if (budgetManager != null) {
                 budgetManager.onTransactionDeleted(toDelete);
