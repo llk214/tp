@@ -336,6 +336,10 @@ public class BudgetManager {
             double allocated = entry.getValue();
             double spent = getSpentForCategory(month, category);
 
+            if (allocated <= 0) {
+                continue;
+            }
+
             // Calculate percentage spent
             double percentage = (spent / allocated) * 100;
 
@@ -372,7 +376,6 @@ public class BudgetManager {
      * @param percentage The percentage spent
      * @param spent Amount spent
      * @param budget Total budget amount
-     * @param ui The UI instance
      */
     private void sendNotification(BudgetCategory category, YearMonth month,
                                   double percentage, double spent, double budget) {
