@@ -374,6 +374,47 @@ budget delete --month 2026-03 --category 1
 ✅ Budget deleted for 2026-03
    Category [1]
 ```
+#### 4.7.5 Yearly Budget Summary
+
+Displays a full yearly overview of all 12 months with budget vs actual spending, a per-category breakdown, and annual totals.
+
+**Format:**
+```
+budget yearly [--year YYYY]
+```
+
+| Parameter | Required | Description                                      |
+|-----------|----------|--------------------------------------------------|
+| `--year`  | No       | Year to summarize (e.g., `2026`). Defaults to current year. |
+
+**Examples:**
+```
+budget yearly
+budget yearly --year 2026
+```
+
+**Expected Output:**
+```
+=== YEARLY BUDGET SUMMARY FOR 2026 ===
+
+Month      | Budget    | Spent     | Remaining | Used  | Trend
+-----------+-----------+-----------+-----------+-------+------------------
+January    | $ 500.00  | $ 327.50  | $ 172.50  |  66%  | █████████░░░░░ 66%
+February   | $ 500.00  | $ 445.00  | $  55.00  |  89%  | ████████████░░ 89%
+...
+
+=== PER CATEGORY BREAKDOWN ===
+Food                           | $  500.00 | $  327.50 | +$172.50   | ✓ Under
+Transport                      | $  500.00 | $  445.00 | +$55.00    | ✓ Under
+
+=== ANNUAL TOTALS ===
+Total Budget:     $6000.00
+Total Spent:      $5500.00
+Net Balance:      +$500.00
+Average Monthly:  $458.33
+```
+
+> **Note:** Months with no budget set will show `$0.00` for budget. Months with transactions but no budget will still show actual spending.
 
 ---
 
