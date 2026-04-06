@@ -59,7 +59,8 @@ public class Parser {
     }
 
     private static boolean isValidAction(String action) {
-        return action.matches("add|delete|modify|list|sort|summarize|help|exit|budget|search|find|export|import|clear|noop");
+        return action.matches(
+                "add|delete|modify|list|sort|summarize|help|exit|budget|search|find|export|import|clear|noop");
     }
 
     private static boolean requiresArguments(String action) {

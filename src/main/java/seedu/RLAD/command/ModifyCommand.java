@@ -13,7 +13,7 @@ import java.util.Map;
  * ModifyCommand handles modifying an existing transaction.
  * Allows updating fields like amount, category, description, type, and date.
  *
- * Format: modify <hashID> --field1 value1 --field2 value2 ...
+ * Format: modify {@code <hashID>} --field1 value1 --field2 value2 ...
  * Examples:
  *   modify a7b2 --amount 25.00
  *   modify a7b2 --amount 25.00 --description "Updated lunch"
@@ -83,7 +83,8 @@ public class ModifyCommand extends Command {
         // Merge: use updated value if provided, else keep existing
         String type = updates.containsKey("type") ? updates.get("type") : existing.getType();
         String category = updates.containsKey("category") ? updates.get("category") : existing.getCategory();
-        String description = updates.containsKey("description") ? updates.get("description") : existing.getDescription();
+        String description = updates.containsKey("description")
+                ? updates.get("description") : existing.getDescription();
         double amount = updates.containsKey("amount") ? parseAmount(updates.get("amount")) : existing.getAmount();
         LocalDate date = updates.containsKey("date") ? parseDate(updates.get("date")) : existing.getDate();
 
