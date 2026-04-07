@@ -58,7 +58,7 @@ filter transactions, and get quick summaries of where your money is going -- all
 
    Format:
    	$action --option_0 $argument_0 ... --option_k $argument_k
-   Type 'help' for the full list or '$action help' for specific argument details.
+   Type 'help' for the full list or 'help <command>' for specific argument details.
    ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
    ```
 6. Type a command at the `>` prompt and press Enter. Refer to [Commands](#commands) below for details on each command.
@@ -387,7 +387,7 @@ Available actions:
 
 Format:
 	$action --option_0 $argument_0 ... --option_k $argument_k
-Type 'help' for the full list or '$action help' for specific argument details.
+Type 'help' for the full list or 'help <command>' for specific argument details.
 ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
 > list --sort amount
 Empty Wallet — no transactions match your criteria.
@@ -415,27 +415,28 @@ at the start, e.g. `[a7b2]`.
 
 **Q**: Is my data saved when I close the app?
 
-**A**: Not in the current version. Data persistence is planned for a future release.
+**A**: Yes. RLAD automatically saves your data after every change. Your transactions are restored when you reopen the app.
 
 ## Known Issues
 
-1. **No persistent storage** -- All transaction data is lost when the app exits. A file-based save/load
-   system is planned.
-2. **Hash ID collisions** -- The 4-character hash IDs have a small chance of collision. Collision detection
-   and regeneration is not yet implemented.
-3. **Commands under development** -- `delete`, `modify`, and `summarize` are recognised by the parser
-   but their execution logic is not yet implemented. They will print placeholder messages.
+1. **Unicode display** -- The separator character (`▀`) may display as garbled text in some terminals.
+   This is a cosmetic issue only.
 
 ## Command Summary
 
 | Command | Format | Status |
 |---------|--------|--------|
 | **add** | `add --type TYPE --amount AMOUNT --date DATE [--category CAT] [--description DESC]` | Working |
+| **delete** | `delete <id>` | Working |
+| **modify** | `modify <id> --amount <new amount>` | Working |
 | **list** | `list [--type TYPE] [--category CAT] [--sort FIELD [DIRECTION]]` | Working |
+| **filter** | `filter [--type T] [--category C] [--amount A] [--date D] [--date-from D] [--date-to D]` | Working |
+| **search** | `search <keyword>` | Working |
 | **sort** | `sort [FIELD [DIRECTION]]` / `sort reset` | Working |
+| **summarize** | `summarize [--type T] [--category C] [--date-from D] [--date-to D]` | Working |
 | **budget** | `budget set\|view\|edit\|delete --month YYYY-MM [--category CODE] [--amount AMT]` | Working |
-| **delete** | `delete <id>` | Planned |
-| **modify** | `modify <id> --amount <new amount>` | Planned |
-| **summarize** | `summarize [--by category\|month\|type]` | Planned |
+| **export** | `export [--file F] [--path P]` | Working |
+| **import** | `import --file F [--merge]` | Working |
+| **clear** | `clear [--force]` | Working |
 | **help** | `help [COMMAND]` | Working |
 | **exit** | `exit` | Working |

@@ -69,8 +69,11 @@ RLAD is best suited for NUS students or young professionals who are comfortable 
 | budget     | Set, view, edit, or delete monthly category budgets      |
 | export     | Export all transactions to a CSV file                    |
 | import     | Import transactions from a CSV file (replace or merge)   |
+| filter     | Display transactions matching filter criteria            |
+| search     | Search transactions by keyword                           |
 | clear      | Permanently delete all transactions                      |
-| help       | Print usage instructions                                 |
+| help       | Show usage instructions for commands                     |
+| exit       | Exit the application                                     |
 |------------|----------------------------------------------------------|
 
 ---
