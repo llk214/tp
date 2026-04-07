@@ -135,12 +135,19 @@ public class AddCommand extends Command {
      * @throws RLADException if the amount format is invalid
      */
     private double convertAmount(String amountStr) throws RLADException {
+        double amount;
         try {
-            return Double.parseDouble(amountStr);   //Code that may cause an exception
+            amount = Double.parseDouble(amountStr);
         } catch (NumberFormatException e) {
-            //Code to execute if the exception is true
             throw new RLADException("Invalid amount format. Please enter a valid number (e.g., 15.50)");
         }
+        if (amount <= 0) {
+            throw new RLADException("Amount must be greater than 0.");
+        }
+        if (amount > 10000000) {
+            throw new RLADException("Amount must not exceed 10,000,000.");
+        }
+        return amount;
     }
 
     /**

@@ -490,6 +490,7 @@ sequenceDiagram
     AddCommand->>AddCommand: parseArguments(rawArgs)
     AddCommand->>AddCommand: validateRequiredFields(parsedArgs)
     AddCommand->>AddCommand: convertAmount("15.50")
+    note right of AddCommand: Rejects amount ≤ 0 or > 10,000,000
     AddCommand->>AddCommand: convertDate("2026-03-05")
     AddCommand->>AddCommand: new Transaction(type, cat, amt, date, desc)
 
@@ -518,6 +519,7 @@ sequenceDiagram
 
 **Design notes:**
 - `AddCommand` is self-contained: it parses, validates, converts, and creates the `Transaction` internally. This keeps `TransactionManager` clean.
+- `convertAmount()` enforces that the amount is positive and does not exceed 10,000,000.
 - Dual-store (ArrayList + HashMap) ensures O(1) lookup while preserving insertion order for display.
 - Budget notification is a side-effect of `addTransaction()` — commands do not need to be aware of the budget system.
 

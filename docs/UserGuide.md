@@ -91,7 +91,7 @@ add --type TYPE --amount AMOUNT --date DATE [--category CATEGORY] [--description
 | Parameter       | Required | Description                                  |
 |-----------------|----------|----------------------------------------------|
 | `--type`        | Yes      | `credit` (income) or `debit` (expense)       |
-| `--amount`      | Yes      | Positive number, up to 2 decimal places      |
+| `--amount`      | Yes      | Positive number up to 10,000,000, up to 2 decimal places |
 | `--date`        | Yes      | Date in `yyyy-MM-dd` format                  |
 | `--category`    | No       | Free-text label (e.g., `food`, `transport`)  |
 | `--description` | No       | Short description; use quotes for spaces     |
@@ -593,7 +593,8 @@ Examples: `2026-03-15`, `2026-01-01`
 
 ### Amounts
 
-- Must be a positive number.
+- Must be a positive number (greater than 0).
+- Must not exceed 10,000,000.
 - Up to 2 decimal places (e.g., `15.50`, `3000`, `0.99`).
 - Do not include currency symbols (`$`) in the input.
 
