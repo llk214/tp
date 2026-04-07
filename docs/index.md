@@ -86,7 +86,7 @@ add --type TYPE --amount AMOUNT --date DATE [--category CATEGORY] [--description
 | Flag | Required | Description |
 |------|----------|-------------|
 | `--type` | Yes | `credit` (income) or `debit` (expense) |
-| `--amount` | Yes | Dollar amount (e.g. `15.00`) |
+| `--amount` | Yes | Positive dollar amount, max 10,000,000 (e.g. `15.00`) |
 | `--date` | Yes | Date in `YYYY-MM-DD` format (e.g. `2026-02-18`) |
 | `--category` | No | Category label (e.g. `food`, `transport`) |
 | `--description` | No | Short description of the transaction |
