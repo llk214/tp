@@ -9,57 +9,45 @@
                +================================================+
 
 ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-Hello and welcome to RLAD!
-Handle your financial life from one spot without the spreadsheet headaches
-Available actions:
-  add       : Record a new transaction
-  modify    : Edit an existing entry
-  budget    : Setting budget goals for the month
-  delete    : Remove an entry
-  sort      : Set or view the global sort order (amount/date, asc/desc)
-  list      : View your transaction history (with filtering and sorting)
-  summarize : Get a high-level breakdown of your spending
-  export    : Export transactions to a CSV file
-  import    : Import transactions from a CSV file
-  filter    : Display transactions matching filter criteria
-  search    : Search transactions by keyword
-  clear     : Delete all transactions permanently
-  help      : Show usage instructions (try 'help <command>')
-  exit      : Exit the application
+💰 Welcome to RLAD - Record Losses And Debt!
+Manage your finances from the command line - no spreadsheet headaches.
 
-Format:
-	$action --option_0 $argument_0 ... --option_k $argument_k
-Type 'help' for the full list or 'help <command>' for specific argument details.
+📌 Quick Start Examples:
+  add credit 3000 2026-03-01 salary "March salary"     # Add income
+  add debit 15.50 2026-03-05 food "Lunch"              # Add expense
+  list                                                 # View all
+  list type:debit                                      # Show expenses
+  budget set 2026-03 1 500                             # Set food budget
+Type 'help' for full documentation or 'help <command>' for details.
 ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
 > ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-Available actions:
-  add       : Record a new transaction
-  modify    : Edit an existing entry
-  budget    : Setting budget goals for the month
-  delete    : Remove an entry
-  sort      : Set or view the global sort order (amount/date, asc/desc)
-  list      : View your transaction history (with filtering and sorting)
-  summarize : Get a high-level breakdown of your spending
-  export    : Export transactions to a CSV file
-  import    : Import transactions from a CSV file
-  filter    : Display transactions matching filter criteria
-  search    : Search transactions by keyword
-  clear     : Delete all transactions permanently
-  help      : Show usage instructions (try 'help <command>')
-  exit      : Exit the application
 
-Format:
-	$action --option_0 $argument_0 ... --option_k $argument_k
+📋 Available Commands:
+  add       - Record income (credit) or expense (debit)
+  delete    - Remove a transaction by ID
+  modify    - Edit an existing transaction
+  list      - View transactions (with optional filters)
+  sort      - Set global sort order (amount/date)
+  summarize - Show spending summary and breakdown
+  budget    - Manage monthly budgets by category
+  export    - Save transactions to CSV file
+  import    - Load transactions from CSV file
+  search    - Find transactions by keyword
+  clear     - Delete ALL transactions (with confirmation)
+  help      - Show this help or command-specific help
+  exit      - Quit the application
+
+💡 Quick Tips:
+  • Use 'list type:debit' to see only expenses
+  • Use 'list cat:food' to filter by category
+  • Use 'list from:2026-03-01 to:2026-03-31' for date ranges
+  • Use quotes for multi-word descriptions: "chicken rice"
 ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
 > ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-Empty Wallet — no transactions match your criteria.
+📭 No transactions found.
 ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
 > ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-✅ Transaction added successfully!
-   HashID: 596f
-   CREDIT: $1000.00 on 2026-03-16
-   Category: (none)
-   Description: (none)
+❌ ERROR: Invalid type: '--type'. Use 'credit' or 'debit'.
 ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-> Thank you for abusing me!
- See you next time...
+> Thank you for using RLAD!
+Your data has been saved. See you next time! 👋
