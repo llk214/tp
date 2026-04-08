@@ -8,6 +8,7 @@ import seedu.RLAD.exception.RLADException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,8 @@ import java.util.List;
 public class AddCommand extends Command {
 
     /** Formatter for strict date parsing in YYYY-MM-DD format */
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter DATE_FORMATTER =
+            DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT);
 
     /** Maximum allowed transaction amount to prevent overflow */
     private static final double MAX_AMOUNT = 10_000_000.00;
