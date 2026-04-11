@@ -6,23 +6,21 @@ import seedu.RLAD.Ui;
 import seedu.RLAD.exception.RLADException;
 import seedu.RLAD.storage.CsvStorageManager;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * Exports all transactions to a CSV file.
+ * Syntax: export [filename]
+ * If no filename is given, defaults to transactions_YYYY-MM-DD.csv in the current directory.
  */
 public class ExportCommand extends Command {
 
     /**
      * Creates a new ExportCommand.
      *
-     * @param rawArgs the raw argument string
+     * @param rawArgs the raw argument string (optional filename)
      */
     public ExportCommand(String rawArgs) {
         super(rawArgs);
@@ -30,24 +28,10 @@ public class ExportCommand extends Command {
 
     @Override
     public void execute(TransactionManager transactions, Ui ui) throws RLADException {
-        Map<String, String> flags = FilterCommand.parseFlags(rawArgs);
-
-        String filename = stripQuotes(flags.getOrDefault("file",
-                "transactions_" + LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE) + ".csv"));
-        if (filename.isBlank()) {
-            throw new RLADException("--file requires a filename. "
-                    + "Example: export --file transactions.csv");
-        }
-
-        String directory = stripQuotes(flags.getOrDefault("path", "."));
-        if (directory.isBlank()) {
-            throw new RLADException("--path requires a directory. "
-                    + "Example: export --path ./data");
-        }
-
-        Path dirPath = Paths.get(directory);
-        if (!Files.isDirectory(dirPath)) {
-            throw new RLADException("Directory does not exist: " + directory);
+        String filename = rawArgs == null ? "" : rawArgs.trim();
+        if (filename.isEmpty()) {
+            filename = "transactions_"
+                    + LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE) + ".csv";
         }
 
         ArrayList<Transaction> txns = transactions.getTransactions();
@@ -56,17 +40,8 @@ public class ExportCommand extends Command {
             return;
         }
 
-        String fullPath = dirPath.resolve(filename).toString();
-        CsvStorageManager.exportToCsv(txns, fullPath);
-
-        ui.showResult("Exported " + txns.size() + " transactions to: " + fullPath);
-    }
-
-    private static String stripQuotes(String value) {
-        if (value.length() >= 2 && value.startsWith("\"") && value.endsWith("\"")) {
-            return value.substring(1, value.length() - 1);
-        }
-        return value;
+        CsvStorageManager.exportToCsv(txns, filename);
+        ui.showResult("Exported " + txns.size() + " transactions to: " + filename);
     }
 
     @Override

@@ -48,7 +48,7 @@ class ImportCommandTest {
     void execute_validFile_importsTransactions() throws Exception {
         Path file = createValidCsv("valid.csv");
         Ui ui = createUiWithInput("");
-        ImportCommand cmd = new ImportCommand("--file " + file);
+        ImportCommand cmd = new ImportCommand(file.toString());
         cmd.execute(tm, ui);
         assertEquals(2, tm.getTransactionCount());
     }
@@ -61,7 +61,7 @@ class ImportCommandTest {
 
         Path file = createValidCsv("merge.csv");
         Ui ui = createUiWithInput("");
-        ImportCommand cmd = new ImportCommand("--file " + file + " --merge");
+        ImportCommand cmd = new ImportCommand(file + " merge");
         cmd.execute(tm, ui);
         assertEquals(3, tm.getTransactionCount());
     }
@@ -73,7 +73,7 @@ class ImportCommandTest {
 
         Path file = createValidCsv("replace.csv");
         Ui ui = createUiWithInput("CONFIRM\n");
-        ImportCommand cmd = new ImportCommand("--file " + file);
+        ImportCommand cmd = new ImportCommand(file.toString());
         cmd.execute(tm, ui);
         assertEquals(2, tm.getTransactionCount());
     }
@@ -85,7 +85,7 @@ class ImportCommandTest {
 
         Path file = createValidCsv("cancel.csv");
         Ui ui = createUiWithInput("no\n");
-        ImportCommand cmd = new ImportCommand("--file " + file);
+        ImportCommand cmd = new ImportCommand(file.toString());
         cmd.execute(tm, ui);
         assertEquals(1, tm.getTransactionCount());
     }
@@ -93,7 +93,7 @@ class ImportCommandTest {
     @Test
     void execute_fileNotFound_throwsException() {
         Ui ui = createUiWithInput("");
-        ImportCommand cmd = new ImportCommand("--file nonexistent.csv");
+        ImportCommand cmd = new ImportCommand("nonexistent.csv");
         assertThrows(RLADException.class, () -> cmd.execute(tm, ui));
     }
 
@@ -106,7 +106,7 @@ class ImportCommandTest {
         Files.writeString(file, content);
 
         Ui ui = createUiWithInput("");
-        ImportCommand cmd = new ImportCommand("--file " + file);
+        ImportCommand cmd = new ImportCommand(file.toString());
         cmd.execute(tm, ui);
         assertEquals(1, tm.getTransactionCount());
     }
@@ -119,30 +119,30 @@ class ImportCommandTest {
         Files.writeString(file, content);
 
         Ui ui = createUiWithInput("");
-        ImportCommand cmd = new ImportCommand("--file " + file);
+        ImportCommand cmd = new ImportCommand(file.toString());
         assertThrows(RLADException.class, () -> cmd.execute(tm, ui));
     }
 
     @Test
     void hasValidArgs_alwaysTrue() {
-        assertEquals(true, new ImportCommand("--file test.csv").hasValidArgs());
-        assertEquals(true, new ImportCommand("--merge").hasValidArgs());
+        assertEquals(true, new ImportCommand("backup.csv").hasValidArgs());
+        assertEquals(true, new ImportCommand("backup.csv merge").hasValidArgs());
         assertEquals(true, new ImportCommand("").hasValidArgs());
     }
 
     @Test
-    void execute_missingFileFlag_throwsException() {
+    void execute_missingFilename_throwsException() {
         Ui ui = createUiWithInput("");
-        ImportCommand cmd = new ImportCommand("--merge");
+        ImportCommand cmd = new ImportCommand("");
         RLADException ex = assertThrows(RLADException.class, () -> cmd.execute(tm, ui));
-        assertTrue(ex.getMessage().contains("--file is required"));
+        assertTrue(ex.getMessage().contains("Usage: import"));
     }
 
     @Test
-    void execute_emptyFileFlag_throwsException() {
+    void execute_onlyMergeKeyword_throwsException() {
         Ui ui = createUiWithInput("");
-        ImportCommand cmd = new ImportCommand("--file");
+        ImportCommand cmd = new ImportCommand("merge");
         RLADException ex = assertThrows(RLADException.class, () -> cmd.execute(tm, ui));
-        assertTrue(ex.getMessage().contains("--file is required"));
+        assertTrue(ex.getMessage().contains("Usage: import"));
     }
 }
