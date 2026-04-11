@@ -572,7 +572,7 @@ sequenceDiagram
     participant BM as BudgetManager
     participant Ui
     
-    User->>Parser: delete --hashID a7b2c3
+    User->>Parser: delete a7b2c3
     Parser->>DeleteCommand: new DeleteCommand(rawArgs)
     DeleteCommand->>DeleteCommand: hasValidArgs()
     
@@ -620,7 +620,7 @@ sequenceDiagram
 **Sequence:**
 
 ```
-Parser.parse("modify a7b2c3 --amount 20.00")
+Parser.parse("modify a7b2c3 amount=20.00")
     |
     v
 ModifyCommand(action, rawArgs) created
@@ -664,7 +664,7 @@ sequenceDiagram
     participant Sorter as TransactionSorter
     participant Ui
 
-    User->>ListCommand: list --type debit --category food --sort amount
+    User->>ListCommand: list type:debit cat:food
     activate ListCommand
 
     ListCommand->>FilterCommand: parseFlags(rawArgs)
@@ -890,7 +890,7 @@ sequenceDiagram
     participant MonthlyBudget
     participant Ui
 
-    User->>Parser: budget set --month 2026-03 --category 1 --amount 500
+    User->>Parser: budget set 2026-03 1 500
     Parser->>BudgetCommand: new BudgetCommand(rawArgs)
 
     User->>BudgetCommand: execute(transactions, ui, budgetManager)
@@ -936,7 +936,7 @@ sequenceDiagram
     participant MonthlyBudget
     participant Ui
 
-    User->>AddCommand: add --type debit --amount 80 --date 2026-03-15
+    User->>AddCommand: add debit 80 2026-03-15
     AddCommand->>TM: addTransaction(t)
 
     activate TM
@@ -1001,14 +1001,13 @@ sequenceDiagram
     participant CSV as CsvStorageManager
     participant Ui
 
-    User->>Parser: export --file backup.csv
-    Parser->>ExportCommand: new ExportCommand("--file backup.csv")
+    User->>Parser: export backup.csv
+    Parser->>ExportCommand: new ExportCommand("backup.csv")
 
     User->>ExportCommand: execute(transactions, ui)
     activate ExportCommand
 
-    ExportCommand->>FilterCommand: parseFlags(rawArgs)
-    FilterCommand-->>ExportCommand: {file: "backup.csv"}
+    ExportCommand->>ExportCommand: parse filename from rawArgs
 
     ExportCommand->>TM: getTransactions()
     TM-->>ExportCommand: ArrayList of transactions
@@ -1046,7 +1045,7 @@ sequenceDiagram
     participant BM as BudgetManager
     participant Ui
 
-    User->>ImportCommand: import --file backup.csv
+    User->>ImportCommand: import backup.csv
     ImportCommand->>ImportCommand: hasValidArgs()
 
     User->>ImportCommand: execute(transactions, ui)
