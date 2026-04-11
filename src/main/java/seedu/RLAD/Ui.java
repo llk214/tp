@@ -353,6 +353,19 @@ public class Ui {
     }
 
     /**
+     * Asks the user a yes/no question and returns their response.
+     *
+     * @param prompt the question to display
+     * @return true if the user answered 'y' or 'yes', false otherwise
+     */
+    public boolean askYesNo(String prompt) {
+        System.out.println(prompt + " (y/n): ");
+        System.out.print("> ");
+        String input = userScanner.nextLine().trim().toLowerCase();
+        return input.equals("y") || input.equals("yes");
+    }
+
+    /**
      * Prints the output of a command (default implementation).
      *
      * @param command The command whose output to display
