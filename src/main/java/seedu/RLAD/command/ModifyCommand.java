@@ -48,7 +48,12 @@ public class ModifyCommand extends Command {
             for (String pair : pairs) {
                 String[] kv = pair.split("=", 2);
                 if (kv.length == 2) {
-                    updates.put(kv[0].toLowerCase(), kv[1]);
+                    String field = kv[0].toLowerCase();
+                    if (updates.containsKey(field)) {
+                        throw new RLADException("Duplicate field: '" + field
+                                + "' was specified more than once.");
+                    }
+                    updates.put(field, kv[1]);
                 } else {
                     throw new RLADException("Invalid format. Use field=value (e.g., amount=25.00)");
                 }
