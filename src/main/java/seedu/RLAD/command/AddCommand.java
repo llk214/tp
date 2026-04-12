@@ -9,8 +9,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Command to add a new transaction to the ledger.
@@ -168,54 +166,82 @@ public class AddCommand extends Command {
      * @param parts All argument parts from split input
      * @return ParsedOptionalFields containing category and description (may be null)
      */
-    private ParsedOptionalFields parseOptionalFields(String[] parts) {
+    private ParsedOptionalFields parseOptionalFields(String[] parts)
+            throws RLADException {
         if (parts.length < 4) {
             return new ParsedOptionalFields(null, null);
         }
 
-        List<String> remainingParts = new ArrayList<>();
-        boolean inQuotes = false;
-        StringBuilder quotedDesc = new StringBuilder();
-        String description = null;
-
-        // Process remaining arguments (from index 3 onward)
+        // Reconstruct the remaining string to handle quotes properly
+        StringBuilder remaining = new StringBuilder();
         for (int i = 3; i < parts.length; i++) {
-            String part = parts[i];
-
-            // Handle quoted description start
-            if (part.startsWith("\"") && !inQuotes) {
-                inQuotes = true;
-                quotedDesc.append(part.substring(1));
-
-                // Handle case where quote ends in same token
-                if (part.endsWith("\"")) {
-                    description = quotedDesc.toString();
-                    description = description.substring(0, description.length() - 1);
-                    inQuotes = false;
-                    quotedDesc.setLength(0);
-                }
-            } else if (inQuotes) {
-                quotedDesc.append(" ").append(part);
-                if (part.endsWith("\"")) {
-                    description = quotedDesc.toString();
-                    description = description.substring(0, description.length() - 1);
-                    inQuotes = false;
-                    quotedDesc.setLength(0);
-                }
-            } else {
-                remainingParts.add(part);
+            if (remaining.length() > 0) {
+                remaining.append(" ");
             }
+            remaining.append(parts[i]);
+        }
+        String rest = remaining.toString().trim();
+
+        return extractCategoryAndDescription(rest);
+    }
+
+    /**
+     * Extracts category and description from the remaining argument string.
+     * Handles quoted strings, empty quotes, and unclosed quotes.
+     */
+    private ParsedOptionalFields extractCategoryAndDescription(String rest)
+            throws RLADException {
+        if (rest.isEmpty()) {
+            return new ParsedOptionalFields(null, null);
         }
 
-        // First remaining part is category (if exists)
-        String category = remainingParts.isEmpty() ? null : remainingParts.get(0);
-
-        // If we have more parts and no quoted description, join them as description
-        if (description == null && remainingParts.size() > 1) {
-            description = String.join(" ", remainingParts.subList(1, remainingParts.size()));
+        // Case 1: Starts with quote — entire rest is the description (no category)
+        if (rest.startsWith("\"")) {
+            String desc = extractQuotedString(rest);
+            return new ParsedOptionalFields(null, desc);
         }
 
-        return new ParsedOptionalFields(category, description);
+        // Case 2: Find the category (first unquoted word)
+        int spaceIdx = rest.indexOf(' ');
+        if (spaceIdx == -1) {
+            // Only category, no description
+            return new ParsedOptionalFields(rest, null);
+        }
+
+        String category = rest.substring(0, spaceIdx);
+        String descPart = rest.substring(spaceIdx + 1).trim();
+
+        if (descPart.isEmpty()) {
+            return new ParsedOptionalFields(category, null);
+        }
+
+        // Extract description (may or may not be quoted)
+        if (descPart.startsWith("\"")) {
+            String desc = extractQuotedString(descPart);
+            return new ParsedOptionalFields(category, desc);
+        }
+
+        return new ParsedOptionalFields(category, descPart);
+    }
+
+    /**
+     * Extracts a quoted string value, validating proper quoting.
+     *
+     * @param input String starting with a quote character
+     * @return The unquoted content
+     * @throws RLADException If the quote is unclosed or content is empty
+     */
+    private String extractQuotedString(String input) throws RLADException {
+        if (!input.endsWith("\"") || input.length() < 2) {
+            throw new RLADException("Unclosed quote in: " + input
+                    + ". Ensure quotes are matched (e.g., \"my description\").");
+        }
+        String content = input.substring(1, input.length() - 1);
+        if (content.trim().isEmpty()) {
+            throw new RLADException("Quoted value cannot be empty. "
+                    + "Remove the quotes or provide a value.");
+        }
+        return content;
     }
 
     /**
