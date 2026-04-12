@@ -117,6 +117,10 @@ public class AutoSaveManager {
             String type = parts[1];
             String category = parts[2].isEmpty() ? null : parts[2];
             double amount = Double.parseDouble(parts[3]);
+            if (amount < 0 || Double.isNaN(amount) || Double.isInfinite(amount)) {
+                logger.warning("Skipping autosave line " + lineNum + ": invalid amount " + parts[3]);
+                return null;
+            }
             LocalDate date = LocalDate.parse(parts[4]);
             String description = parts.length > 5 && !parts[5].isEmpty() ? parts[5] : null;
 
@@ -151,6 +155,11 @@ public class AutoSaveManager {
                     String type = parts[1];
                     String category = parts[2].isEmpty() ? null : parts[2];
                     double amount = Double.parseDouble(parts[3]);
+                    if (amount < 0 || Double.isNaN(amount) || Double.isInfinite(amount)) {
+                        logger.warning("Skipping legacy line " + lineNum
+                                + ": invalid amount " + parts[3]);
+                        continue;
+                    }
                     LocalDate date = LocalDate.parse(parts[4]);
                     String description = parts.length > 5 && !parts[5].isEmpty() ? parts[5] : null;
 

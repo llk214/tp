@@ -502,6 +502,10 @@ public class BudgetManager {
                     YearMonth month = YearMonth.parse(parts[0].trim());
                     int code = Integer.parseInt(parts[1].trim());
                     double amount = Double.parseDouble(parts[2].trim());
+                    if (amount <= 0 || Double.isNaN(amount) || Double.isInfinite(amount)) {
+                        logger.warning("Skipping invalid budget amount: " + line);
+                        continue;
+                    }
                     BudgetCategory category = BudgetCategory.fromCode(code);
                     getOrCreateBudget(month).setBudget(category, amount);
                 } catch (Exception e) {
