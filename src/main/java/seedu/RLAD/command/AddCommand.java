@@ -174,7 +174,12 @@ public class AddCommand extends Command {
                     , MAX_AMOUNT, amount));
         }
 
-        return Math.round(amount * 100.0) / 100.0;
+        // Round to 2 decimal places for consistency
+        double rounded = Math.round(amount * 100.0) / 100.0;
+        if (rounded <= 0) {
+            throw new RLADException("Amount rounds to $0.00. Minimum is $0.01.");
+        }
+        return rounded;
     }
 
     private LocalDate parseAndValidateDate(String dateStr) throws RLADException {
@@ -194,7 +199,7 @@ public class AddCommand extends Command {
         String successMessage = String.format(
                 "✅ Transaction added successfully!\n" +
                         "   ID: %s\n" +
-                        "   %s: $%.2f on %s\n" +
+                        "   %s: $%,.2f on %s\n" +
                         "   Category: %s\n" +
                         "   Description: %s",
                 transaction.getHashId(),
