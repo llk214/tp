@@ -121,10 +121,9 @@ class ModifyCommandTest {
     }
 
     @Test
-    void execute_unknownField_throwsException() {
+    void execute_amountRoundsToZero_throwsException() {
         RLADException ex = assertThrows(RLADException.class, () ->
-                new ModifyCommand(existingId + " foo=1").execute(manager, ui));
-        assertTrue(ex.getMessage().contains("Unknown field"));
-        assertTrue(ex.getMessage().contains("foo"));
+                new ModifyCommand(existingId + " amount=0.001").execute(manager, ui));
+        assertTrue(ex.getMessage().contains("$0.00") || ex.getMessage().contains("0.01"));
     }
 }

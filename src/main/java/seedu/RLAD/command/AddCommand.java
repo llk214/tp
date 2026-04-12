@@ -138,7 +138,11 @@ public class AddCommand extends Command {
         }
 
         // Round to 2 decimal places for consistency
-        return Math.round(amount * 100.0) / 100.0;
+        double rounded = Math.round(amount * 100.0) / 100.0;
+        if (rounded <= 0) {
+            throw new RLADException("Amount rounds to $0.00. Minimum is $0.01.");
+        }
+        return rounded;
     }
 
     /**

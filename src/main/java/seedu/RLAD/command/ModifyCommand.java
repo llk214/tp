@@ -110,7 +110,11 @@ public class ModifyCommand extends Command {
             if (value > MAX_AMOUNT) {
                 throw new RLADException(String.format("Amount cannot exceed $%,.2f", MAX_AMOUNT));
             }
-            return value;
+            double rounded = Math.round(value * 100.0) / 100.0;
+            if (rounded <= 0) {
+                throw new RLADException("Amount rounds to $0.00. Minimum is $0.01.");
+            }
+            return rounded;
         } catch (NumberFormatException e) {
             throw new RLADException("Invalid amount");
         }

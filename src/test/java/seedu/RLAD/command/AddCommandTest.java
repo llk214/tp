@@ -122,6 +122,20 @@ public class AddCommandTest {
             System.out.println("✗ FAIL: " + e.getMessage() + "\n");
         }
 
+        // Test 12: Amount that rounds to $0.00 should be rejected
+        System.out.println("Test 12: Amount 0.001 rounds to $0.00");
+        try {
+            AddCommand cmd12 = new AddCommand("credit 0.001 2026-03-01 food");
+            cmd12.execute(tm, ui);
+            System.out.println("✗ FAIL: Should have thrown exception\n");
+        } catch (RLADException e) {
+            if (e.getMessage().contains("$0.00") || e.getMessage().contains("0.01")) {
+                System.out.println("✓ PASS: " + e.getMessage() + "\n");
+            } else {
+                System.out.println("✗ FAIL: Wrong message: " + e.getMessage() + "\n");
+            }
+        }
+
         // Show final transactions
         System.out.println("\n=== FINAL TRANSACTIONS ===");
         if (tm.getTransactions().isEmpty()) {
