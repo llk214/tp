@@ -89,6 +89,11 @@ public class BudgetManager {
         this.ui = ui;
     }
 
+    private static final String SAVE_DIR = "data";
+    private static final String SAVE_FILE = "data" + File.separator + "budgets.csv";
+    private static final String CSV_HEADER = "Month,CategoryCode,Amount";
+    private static final Logger logger = Logger.getLogger(BudgetManager.class.getName());
+
     /**
      * Gets or creates a monthly budget.
      * @param month The month to retrieve

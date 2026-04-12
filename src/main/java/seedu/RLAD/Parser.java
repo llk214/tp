@@ -171,7 +171,7 @@ public class Parser {
             return new SummarizeCommand(arguments);
 
         case "modify":
-            return new ModifyCommand(arguments);
+            return new ModifyCommand(action, arguments);
 
         case "budget":
             return new BudgetCommand(arguments);
