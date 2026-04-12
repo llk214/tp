@@ -73,11 +73,26 @@ class ClearCommandTest {
     }
 
     @Test
-    void hasValidArgs_always_returnsTrue() {
+    void hasValidArgs_validArgs_returnsTrue() {
         ClearCommand cmd = new ClearCommand("--force");
         assertEquals(true, cmd.hasValidArgs());
 
         ClearCommand cmd2 = new ClearCommand("");
         assertEquals(true, cmd2.hasValidArgs());
+
+        ClearCommand cmd3 = new ClearCommand("--FORCE");
+        assertEquals(true, cmd3.hasValidArgs());
+    }
+
+    @Test
+    void hasValidArgs_invalidArgs_returnsFalse() {
+        ClearCommand cmd = new ClearCommand("[--force]");
+        assertEquals(false, cmd.hasValidArgs());
+
+        ClearCommand cmd2 = new ClearCommand("randomText");
+        assertEquals(false, cmd2.hasValidArgs());
+
+        ClearCommand cmd3 = new ClearCommand("--invalid");
+        assertEquals(false, cmd3.hasValidArgs());
     }
 }

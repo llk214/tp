@@ -22,6 +22,7 @@ public class RLAD {
         this.budgetManager.setUi(this.ui);
         this.transactions.setBudgetManager(budgetManager);
         this.transactions.loadFromAutoSave();
+        this.budgetManager.load();
 
         // daddy logger takes care of all the loggers from here
         Logger packageLogger = Logger.getLogger("seedu.RLAD");

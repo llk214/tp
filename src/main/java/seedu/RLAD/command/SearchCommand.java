@@ -6,7 +6,6 @@ import seedu.RLAD.Ui;
 import seedu.RLAD.exception.RLADException;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SearchCommand extends Command {
@@ -18,9 +17,7 @@ public class SearchCommand extends Command {
     }
 
     private String parseKeyword() {
-        Map<String, String> flags = FilterCommand.parseFlags(rawArgs);
-        String keyword = flags.get("keyword");
-        return (keyword != null && !keyword.isEmpty()) ? keyword : null;
+        return (rawArgs != null && !rawArgs.trim().isEmpty()) ? rawArgs.trim() : null;
     }
 
     private boolean matchesKeyword(Transaction t, String keyword) {
@@ -66,8 +63,10 @@ public class SearchCommand extends Command {
                     t.getType().toUpperCase(),
                     t.getDate().toString(),
                     String.format("$%.2f", t.getAmount()),
-                    t.getCategory().isEmpty() ? "(none)" : t.getCategory(),
-                    t.getDescription().isEmpty() ? "(none)" : t.getDescription()));
+                    (t.getCategory() == null || t.getCategory().isEmpty())
+                            ? "(none)" : t.getCategory(),
+                    (t.getDescription() == null || t.getDescription().isEmpty())
+                            ? "(none)" : t.getDescription()));
         }
         ui.showResult(DIVIDER);
         ui.showResult("  " + results.size() + " transaction(s) found for: \"" + keyword + "\"");
@@ -75,6 +74,6 @@ public class SearchCommand extends Command {
 
     @Override
     public boolean hasValidArgs() {
-        return rawArgs != null && rawArgs.contains("--keyword") && parseKeyword() != null;
+        return rawArgs != null && !rawArgs.trim().isEmpty();
     }
 }

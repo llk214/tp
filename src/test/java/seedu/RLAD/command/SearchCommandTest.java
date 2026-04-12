@@ -40,43 +40,43 @@ class SearchCommandTest {
 
     @Test
     void execute_searchByDescription_findsMatch() throws Exception {
-        new SearchCommand("--keyword lunch").execute(manager, ui);
+        new SearchCommand("lunch").execute(manager, ui);
         assertTrue(output.stream().anyMatch(s -> s.contains("Hawker lunch")));
     }
 
     @Test
     void execute_searchByCategory_findsMatch() throws Exception {
-        new SearchCommand("--keyword food").execute(manager, ui);
+        new SearchCommand("food").execute(manager, ui);
         assertTrue(output.stream().anyMatch(s -> s.contains("food") || s.contains("FOOD")));
     }
 
     @Test
     void execute_searchByAmount_findsMatch() throws Exception {
-        new SearchCommand("--keyword 50.00").execute(manager, ui);
+        new SearchCommand("50.00").execute(manager, ui);
         assertTrue(output.stream().anyMatch(s -> s.contains("$50.00")));
     }
 
     @Test
     void execute_noMatches_showsEmptyMessage() throws Exception {
-        new SearchCommand("--keyword xyz999").execute(manager, ui);
+        new SearchCommand("xyz999").execute(manager, ui);
         assertTrue(output.get(0).contains("No transactions found matching"));
     }
 
     @Test
     void execute_searchByPartialDescription_findsMatch() throws Exception {
-        new SearchCommand("--keyword MRT").execute(manager, ui);
+        new SearchCommand("MRT").execute(manager, ui);
         assertTrue(output.stream().anyMatch(s -> s.contains("MRT")));
     }
 
     @Test
     void execute_caseInsensitive_findsMatch() throws Exception {
-        new SearchCommand("--keyword SALARY").execute(manager, ui);
+        new SearchCommand("SALARY").execute(manager, ui);
         assertTrue(output.stream().anyMatch(s -> s.contains("salary") || s.contains("SALARY")));
     }
 
     @Test
     void hasValidArgs_withKeyword_returnsTrue() {
-        assertTrue(new SearchCommand("--keyword food").hasValidArgs());
+        assertTrue(new SearchCommand("food").hasValidArgs());
     }
 
     @Test
@@ -87,7 +87,7 @@ class SearchCommandTest {
 
     @Test
     void execute_showsResultCount() throws Exception {
-        new SearchCommand("--keyword food").execute(manager, ui);
+        new SearchCommand("food").execute(manager, ui);
         assertTrue(output.stream().anyMatch(s -> s.contains("transaction(s) found")));
     }
 }

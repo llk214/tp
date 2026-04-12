@@ -5,14 +5,23 @@ import seedu.RLAD.TransactionManager;
 import seedu.RLAD.exception.RLADException;
 import seedu.RLAD.Ui;
 
+import seedu.RLAD.storage.CsvStorageManager;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.YearMonth;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.Arrays;
-import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Manages all monthly budgets and handles progress calculations.
@@ -112,6 +121,7 @@ public class BudgetManager {
 
         // Update total income for the month
         updateTotalIncome(month);
+        save();
     }
 
     /**
@@ -126,6 +136,7 @@ public class BudgetManager {
         MonthlyBudget budget = getBudget(month)
                 .orElseThrow(() -> new RLADException("No budget found for " + month));
         budget.editBudget(category, amount);
+        save();
     }
 
     /**
@@ -144,6 +155,7 @@ public class BudgetManager {
         if (budget.getBudgetedCategoryCount() == 0) {
             budgets.remove(month);
         }
+        save();
     }
 
     /**
@@ -564,6 +576,77 @@ public class BudgetManager {
             ui.showResult(message);
         }
     }
+    /**
+     * Saves all budget entries to data/budget.csv.
+     * Uses CSV format with header: Month,CategoryCode,Amount
+     * Fields are escaped via CsvStorageManager so commas in future fields are handled correctly.
+     */
+    public void save() {
+        try {
+            File dir = new File(SAVE_DIR);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            BufferedWriter writer = new BufferedWriter(new FileWriter(SAVE_FILE));
+            writer.write(CSV_HEADER);
+            writer.newLine();
+            for (Map.Entry<YearMonth, MonthlyBudget> entry : budgets.entrySet()) {
+                YearMonth month = entry.getKey();
+                for (Map.Entry<BudgetCategory, Double> catEntry
+                        : entry.getValue().getCategoryBudgets().entrySet()) {
+                    String line = CsvStorageManager.escapeCsvField(month.toString())
+                            + "," + CsvStorageManager.escapeCsvField(
+                                    String.valueOf(catEntry.getKey().getCode()))
+                            + "," + CsvStorageManager.escapeCsvField(
+                                    String.format("%.2f", catEntry.getValue()));
+                    writer.write(line);
+                    writer.newLine();
+                }
+            }
+            writer.close();
+        } catch (IOException e) {
+            logger.warning("Budget save failed: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Loads budget entries from data/rlad_budget.csv on startup.
+     * Uses CsvStorageManager.parseCsvLine() so quoted commas are handled correctly.
+     * Silently skips the header and any malformed lines.
+     */
+    public void load() {
+        File file = new File(SAVE_FILE);
+        if (!file.exists()) {
+            return;
+        }
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line = reader.readLine(); // skip header
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+                String[] parts = CsvStorageManager.parseCsvLine(line);
+                if (parts.length != 3) {
+                    logger.warning("Skipping invalid budget line: " + line);
+                    continue;
+                }
+                try {
+                    YearMonth month = YearMonth.parse(parts[0].trim());
+                    int code = Integer.parseInt(parts[1].trim());
+                    double amount = Double.parseDouble(parts[2].trim());
+                    BudgetCategory category = BudgetCategory.fromCode(code);
+                    getOrCreateBudget(month).setBudget(category, amount);
+                } catch (Exception e) {
+                    logger.warning("Skipping invalid budget line: " + line);
+                }
+            }
+            reader.close();
+        } catch (IOException e) {
+            logger.warning("Budget load failed: " + e.getMessage());
+        }
+    }
+
     public String getYearlySummary(int year) {
         List<String> monthNames = Arrays.asList(
                 "January", "February", "March", "April",

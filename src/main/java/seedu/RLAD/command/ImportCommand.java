@@ -8,17 +8,17 @@ import seedu.RLAD.storage.CsvStorageManager;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Map;
 
 /**
  * Imports transactions from a CSV file, either replacing or merging with existing data.
+ * Syntax: import &lt;filename&gt; [merge]
  */
 public class ImportCommand extends Command {
 
     /**
      * Creates a new ImportCommand.
      *
-     * @param rawArgs the raw argument string
+     * @param rawArgs the raw argument string (filename and optional merge keyword)
      */
     public ImportCommand(String rawArgs) {
         super(rawArgs);
@@ -26,15 +26,21 @@ public class ImportCommand extends Command {
 
     @Override
     public void execute(TransactionManager transactions, Ui ui) throws RLADException {
-        Map<String, String> flags = FilterCommand.parseFlags(rawArgs);
+        String args = rawArgs == null ? "" : rawArgs.trim();
 
-        String filePath = flags.get("file");
-        if (filePath == null || filePath.isBlank()) {
-            throw new RLADException("--file is required for import. "
-                    + "Usage: import --file FILENAME [--merge]");
+        boolean mergeMode = false;
+        if (args.toLowerCase().endsWith(" merge")) {
+            mergeMode = true;
+            args = args.substring(0, args.length() - " merge".length()).trim();
+        } else if (args.equalsIgnoreCase("merge")) {
+            args = "";
         }
 
-        boolean mergeMode = flags.containsKey("merge");
+        if (args.isBlank()) {
+            throw new RLADException("Usage: import <filename> [merge]");
+        }
+
+        String filePath = args;
 
         if (!Files.exists(Paths.get(filePath))) {
             throw new RLADException("File not found: " + filePath);
@@ -44,7 +50,7 @@ public class ImportCommand extends Command {
             boolean confirmed = ui.askConfirmation(
                     "WARNING: Replace mode will delete all "
                             + transactions.getTransactionCount() + " existing transactions.\n"
-                            + "Use --merge to add to existing data instead.");
+                            + "Use merge to add to existing data instead.");
             if (!confirmed) {
                 ui.showResult("Import cancelled.");
                 return;

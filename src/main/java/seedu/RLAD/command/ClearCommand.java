@@ -5,11 +5,15 @@ import seedu.RLAD.Ui;
 import seedu.RLAD.exception.RLADException;
 
 import java.util.Map;
+import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * Clears all transactions from storage after user confirmation.
  */
 public class ClearCommand extends Command {
+
+    private static final HashSet<String> VALID_FLAGS = new HashSet<>(Arrays.asList("force"));
 
     /**
      * Creates a new ClearCommand.
@@ -22,8 +26,12 @@ public class ClearCommand extends Command {
 
     @Override
     public void execute(TransactionManager transactions, Ui ui) throws RLADException {
+        if (!hasValidArgs()) {
+            throw new RLADException(getInvalidArgsMessage());
+        }
         Map<String, String> flags = FilterCommand.parseFlags(rawArgs);
-        boolean forceMode = flags.containsKey("force");
+        boolean forceMode = flags.keySet().stream()
+                .anyMatch(f -> f.equalsIgnoreCase("force"));
 
         int count = transactions.getTransactionCount();
         if (count == 0) {
@@ -47,6 +55,22 @@ public class ClearCommand extends Command {
 
     @Override
     public boolean hasValidArgs() {
+        if (rawArgs == null || rawArgs.trim().isEmpty()) {
+            return true;
+        }
+        Map<String, String> flags = FilterCommand.parseFlags(rawArgs);
+        for (String flag : flags.keySet()) {
+            if (!VALID_FLAGS.contains(flag.toLowerCase())) {
+                return false;
+            }
+        }
         return true;
+    }
+
+    /**
+     * Returns an error message for invalid arguments.
+     */
+    public String getInvalidArgsMessage() {
+        return "Invalid argument. Usage: clear [--force]";
     }
 }

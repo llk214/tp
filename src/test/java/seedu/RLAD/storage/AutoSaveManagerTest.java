@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class AutoSaveManagerTest {
 
     private AutoSaveManager autoSaveManager;
-    private final String saveFile = "data" + File.separator + "rlad.txt";
+    private final String saveFile = "data" + File.separator + "rlad.csv";
 
     @BeforeEach
     void setUp() {
@@ -105,7 +105,7 @@ class AutoSaveManagerTest {
 
         ArrayList<Transaction> loaded = autoSaveManager.load();
         assertEquals(1, loaded.size());
-        // Description is the last field, so pipes within it are preserved
+        // CSV format correctly escapes pipe characters in any field
         assertEquals("lunch|dinner", loaded.get(0).getDescription());
     }
 }
