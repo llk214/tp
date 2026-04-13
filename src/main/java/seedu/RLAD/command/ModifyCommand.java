@@ -118,7 +118,6 @@ public class ModifyCommand extends Command {
             char c = input.charAt(i);
             if (c == '"') {
                 inQuotes = !inQuotes;
-                current.append(c);
             } else if (c == ' ' && !inQuotes) {
                 if (current.length() > 0) {
                     tokens.add(removeSurroundingQuotes(current.toString()));
