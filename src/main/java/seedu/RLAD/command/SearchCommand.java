@@ -40,7 +40,7 @@ public class SearchCommand extends Command {
     @Override
     public void execute(TransactionManager transactions, Ui ui) throws RLADException {
         if (!hasValidArgs()) {
-            throw new RLADException("Missing required field: --keyword");
+            throw new RLADException("Usage: search <keyword>. Example: search food");
         }
 
         String keyword = parseKeyword();

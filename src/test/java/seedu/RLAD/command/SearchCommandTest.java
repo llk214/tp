@@ -90,4 +90,5 @@ class SearchCommandTest {
         new SearchCommand("food").execute(manager, ui);
         assertTrue(output.stream().anyMatch(s -> s.contains("transaction(s) found")));
     }
+
 }
