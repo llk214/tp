@@ -120,7 +120,7 @@ public class BudgetCommand extends Command {
         }
 
         // Check if budget already exists for this category
-        BudgetCategory category = BudgetCategory.fromCode(categoryCode);
+        category = BudgetCategory.fromCode(categoryCode);
         Optional<MonthlyBudget> existing = budgetManager.getBudget(month);
         if (existing.isPresent() && existing.get().getBudgetForCategory(category) > 0) {
             throw new RLADException(String.format(
